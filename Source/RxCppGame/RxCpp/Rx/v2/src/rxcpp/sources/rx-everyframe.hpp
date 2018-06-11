@@ -54,7 +54,7 @@ struct everyframe : public source_base<long>
         everyframe_initial_type(rxsc::scheduler::clock_type::time_point i, rxsc::scheduler::clock_type::duration p, long c, coordination_type cn)
             : initial(i)
             , period(p)
-            , count(c)
+            , count(c == 0 ? 1 : c)
             , coordination(std::move(cn))
         {
         }
