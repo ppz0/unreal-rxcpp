@@ -1,0 +1,114 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "RxCppGame (Debug)",
+			"request": "launch",
+			"preLaunchTask": "RxCppGame Win64 Debug Build",
+			"program": "C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\Binaries\\Win64\\RxCppGame-Win64-Debug.exe",
+			"args": [
+			],
+			"cwd": "C:\\Program Files\\Epic Games\\UE_4.18",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "RxCppGame (DebugGame)",
+			"request": "launch",
+			"preLaunchTask": "RxCppGame Win64 DebugGame Build",
+			"program": "C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\Binaries\\Win64\\RxCppGame-Win64-DebugGame.exe",
+			"args": [
+			],
+			"cwd": "C:\\Program Files\\Epic Games\\UE_4.18",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "RxCppGame (Development)",
+			"request": "launch",
+			"preLaunchTask": "RxCppGame Win64 Development Build",
+			"program": "C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\Binaries\\Win64\\RxCppGame.exe",
+			"args": [
+			],
+			"cwd": "C:\\Program Files\\Epic Games\\UE_4.18",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "RxCppGame (Shipping)",
+			"request": "launch",
+			"preLaunchTask": "RxCppGame Win64 Shipping Build",
+			"program": "C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\Binaries\\Win64\\RxCppGame-Win64-Shipping.exe",
+			"args": [
+			],
+			"cwd": "C:\\Program Files\\Epic Games\\UE_4.18",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "RxCppGame (Test)",
+			"request": "launch",
+			"preLaunchTask": "RxCppGame Win64 Test Build",
+			"program": "C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\Binaries\\Win64\\RxCppGame-Win64-Test.exe",
+			"args": [
+			],
+			"cwd": "C:\\Program Files\\Epic Games\\UE_4.18",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "RxCppGameEditor (Debug)",
+			"request": "launch",
+			"preLaunchTask": "RxCppGameEditor Win64 Debug Build",
+			"program": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Binaries\\Win64\\UE4Editor-Win64-Debug.exe",
+			"args": [
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-debug"
+			],
+			"cwd": "C:\\Program Files\\Epic Games\\UE_4.18",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "RxCppGameEditor (DebugGame)",
+			"request": "launch",
+			"preLaunchTask": "RxCppGameEditor Win64 DebugGame Build",
+			"program": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Binaries\\Win64\\UE4Editor.exe",
+			"args": [
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-debug"
+			],
+			"cwd": "C:\\Program Files\\Epic Games\\UE_4.18",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		},
+		{
+			"name": "RxCppGameEditor (Development)",
+			"request": "launch",
+			"preLaunchTask": "RxCppGameEditor Win64 Development Build",
+			"program": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Binaries\\Win64\\UE4Editor.exe",
+			"args": [
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject"
+			],
+			"cwd": "C:\\Program Files\\Epic Games\\UE_4.18",
+			"stopAtEntry": false,
+			"externalConsole": true,
+			"type": "cppvsdbg",
+			"visualizerFile": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Extras\\VisualStudioDebugging\\UE4.natvis"
+		}
+	]
+}

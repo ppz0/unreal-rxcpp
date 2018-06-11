@@ -1,0 +1,447 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"taskName": "RxCppGame Win32 Debug Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"Debug",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win32 Debug Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"Debug",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win32 DebugGame Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"DebugGame",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win32 DebugGame Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"DebugGame",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win32 Development Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"Development",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win32 Development Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"Development",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win32 Shipping Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"Shipping",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win32 Shipping Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"Shipping",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win32 Test Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"Test",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win32 Test Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win32",
+				"Test",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 Debug Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"Debug",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 Debug Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"Debug",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 DebugGame Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 DebugGame Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 Development Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"Development",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 Development Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"Development",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 Shipping Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"Shipping",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 Shipping Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"Shipping",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 Test Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"Test",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGame Win64 Test Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGame",
+				"Win64",
+				"Test",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGameEditor Win64 Debug Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGameEditor",
+				"Win64",
+				"Debug",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGameEditor Win64 Debug Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGameEditor",
+				"Win64",
+				"Debug",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGameEditor Win64 DebugGame Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGameEditor",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGameEditor Win64 DebugGame Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGameEditor",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGameEditor Win64 Development Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"RxCppGameEditor",
+				"Win64",
+				"Development",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		},
+		{
+			"taskName": "RxCppGameEditor Win64 Development Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"RxCppGameEditor",
+				"Win64",
+				"Development",
+				"C:\\Users\\chanypark\\Documents\\dev\\unreal-rxcpp\\RxCppGame.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.18"
+			}
+		}
+	]
+}
