@@ -1724,6 +1724,13 @@ public:
         -> decltype(rxs::timer(when, std::move(cn))) {
         return      rxs::timer(when, std::move(cn));
     }
+    /*! @copydoc rx-timer.hpp
+     */
+    template<class Coordination>
+    static auto timer(float when, Coordination cn)
+        -> decltype(rxs::timer(when, std::move(cn))) {
+        return      rxs::timer(when, std::move(cn));
+    }
 
     /*! @copydoc rx-iterate.hpp
      */

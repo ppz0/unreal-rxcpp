@@ -19,19 +19,19 @@ void ATestActor::BeginPlay()
 
 	TWeakObjectPtr<AActor> self(this);
 
-	observable<>::everyframe(60, observe_on_tick_group<TG_PrePhysics>())
+	observable<>::everyframe(60, On_TG_PrePhysics)
 		.take_while([self](auto _) { return self.IsValid(); })
 		.subscribe([](auto v) {
 			UE_LOG(LogTemp, Warning, TEXT("frame => %d"), v);
 		});
 		
-	observable<>::everyframe(60, observe_on_tick_group<TG_PostPhysics>())
+	observable<>::everyframe(60, On_TG_PostPhysics)
 		.take_while([self](auto _) { return self.IsValid(); })
 		.subscribe([](auto v) {
 			UE_LOG(LogTemp, Warning, TEXT("frame (Post) => %d"), v);
 		});
 
-	observable<>::timer(std::chrono::milliseconds(4000), observe_on_tick_group<TG_PostUpdateWork>())
+	observable<>::timer(5.f, On_TG_PostUpdateWork)
 		.take_while([self](auto _) { return self.IsValid(); })
 		.subscribe([](auto _) {
 			UE_LOG(LogTemp, Warning, TEXT("Time out~"));

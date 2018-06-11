@@ -40,22 +40,22 @@ void FRxCppManager::FRunLoopTickFunction::ExecuteTick(float DeltaTime, enum ELev
 {
 	if (TickGroup == TG_PrePhysics)
 	{
-		get_run_loop_delta_sec<TG_PrePhysics>() = DeltaTime;
+		get_tick_group_delta<TG_PrePhysics>() = DeltaTime;
 		get_run_loop<TG_PrePhysics>().dispatch_many();
 	}
 	else if (TickGroup == TG_DuringPhysics)
 	{
-		get_run_loop_delta_sec<TG_DuringPhysics>() = DeltaTime;
+		get_tick_group_delta<TG_DuringPhysics>() = DeltaTime;
 		get_run_loop<TG_DuringPhysics>().dispatch_many();
 	}
 	else if (TickGroup == TG_PostPhysics)
 	{
-		get_run_loop_delta_sec<TG_PostPhysics>() = DeltaTime;
+		get_tick_group_delta<TG_PostPhysics>() = DeltaTime;
 		get_run_loop<TG_PostPhysics>().dispatch_many();
 	}
 	else if (TickGroup == TG_PostUpdateWork)
 	{
-		get_run_loop_delta_sec<TG_PostUpdateWork>() = DeltaTime;
+		get_tick_group_delta<TG_PostUpdateWork>() = DeltaTime;
 		get_run_loop<TG_PostUpdateWork>().dispatch_many();
 	}
 }

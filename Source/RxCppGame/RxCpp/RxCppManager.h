@@ -26,7 +26,7 @@ namespace rxcpp
 	}
 
 	template <ETickingGroup TickGroup>
-	inline float& get_run_loop_delta_sec()
+	inline float& get_tick_group_delta()
 	{
 		static float deltaTime = 0.f;
 		return deltaTime;
@@ -40,6 +40,11 @@ namespace rxcpp
 	}
 
 }
+
+#define On_TG_PrePhysics observe_on_tick_group<TG_PrePhysics>()
+#define On_TG_DuringPhysics observe_on_tick_group<TG_DuringPhysics>()
+#define On_TG_PostPhysics observe_on_tick_group<TG_PostPhysics>()
+#define On_TG_PostUpdateWork observe_on_tick_group<TG_PostUpdateWork>()
 
 
 class FRxCppManager

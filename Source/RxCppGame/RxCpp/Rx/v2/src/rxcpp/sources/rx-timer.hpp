@@ -128,6 +128,16 @@ auto timer(TimePointOrDuration when, Coordination cn)
     return          detail::defer_timer<TimePointOrDuration, Coordination>::make(when, std::move(cn));
 }
 
+/*! @copydoc rx-timer.hpp
+ */
+template<class Coordination>
+auto timer(float when, Coordination cn)
+    ->  typename std::enable_if<
+                    detail::defer_timer<std::chrono::milliseconds, Coordination>::value,
+        typename    detail::defer_timer<std::chrono::milliseconds, Coordination>::observable_type>::type {
+    return          detail::defer_timer<std::chrono::milliseconds, Coordination>::make(std::chrono::milliseconds((long)(when * 1000.f)), std::move(cn));
+}
+
 }
 
 }
