@@ -147,6 +147,16 @@ auto interval(rxsc::scheduler::clock_type::time_point when, rxsc::scheduler::clo
     return          detail::defer_interval<rxsc::scheduler::clock_type::duration, Coordination>::make(when, period, std::move(cn));
 }
 
+/*! @copydoc rx-interval.hpp
+ */
+template<class Coordination>
+auto interval(float period, Coordination cn)
+    ->  typename std::enable_if<
+                    detail::defer_interval<std::chrono::milliseconds, Coordination>::value,
+        typename    detail::defer_interval<std::chrono::milliseconds, Coordination>::observable_type>::type {
+    return          detail::defer_interval<std::chrono::milliseconds, Coordination>::make(cn.now(), std::chrono::milliseconds((int)(period * 1000.f)), std::move(cn));
+}
+
 }
 
 }

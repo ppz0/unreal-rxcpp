@@ -1693,6 +1693,13 @@ public:
         -> decltype(rxs::interval(initial, period, std::move(cn))) {
         return      rxs::interval(initial, period, std::move(cn));
     }
+    /*! @copydoc rx-interval.hpp
+     */
+    template<class Coordination>
+    static auto interval(float period, Coordination cn)
+        -> decltype(rxs::interval(period, std::move(cn))) {
+        return      rxs::interval(period, std::move(cn));
+    }
 
     /*! @copydoc rx-timer.hpp
      */

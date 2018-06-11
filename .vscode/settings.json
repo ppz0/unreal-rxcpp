@@ -5,5 +5,8 @@
 		"C:/Users/chanypark/Documents/dev/unreal-rxcpp/.vscode": true,
 		"C:/Users/chanypark/Documents/dev/unreal-rxcpp/Intermediate": true,
 		"C:/Users/chanypark/Documents/dev/unreal-rxcpp/Saved": true
+	},
+	"files.associations": {
+		"chrono": "cpp"
 	}
 }

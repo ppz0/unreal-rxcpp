@@ -25,16 +25,32 @@ void ATestActor::BeginPlay()
 			UE_LOG(LogTemp, Warning, TEXT("frame => %d"), v);
 		});
 		
-	observable<>::everyframe(60, On_TG_PostPhysics)
-		.take_while([self](auto _) { return self.IsValid(); })
-		.subscribe([](auto v) {
-			UE_LOG(LogTemp, Warning, TEXT("frame (Post) => %d"), v);
-		});
+	// observable<>::everyframe(60, On_TG_PostPhysics)
+	// 	.take_while([self](auto _) { return self.IsValid(); })
+	// 	.subscribe([](auto v) {
+	// 		UE_LOG(LogTemp, Warning, TEXT("frame (Post) => %d"), v);
+	// 	});
 
-	observable<>::timer(5.f, On_TG_PostUpdateWork)
+	// observable<>::timer(5.f, On_TG_PostUpdateWork)
+	// 	.take_while([self](auto _) { return self.IsValid(); })
+	// 	.subscribe([](auto _) {
+	// 		UE_LOG(LogTemp, Warning, TEXT("Time out~"));
+	// 	});
+
+	static int val = 0;
+
+	observable<>::everyframe(1, On_TG_PrePhysics)
+		.take_while([self](auto _) { return self.IsValid(); })
+		.map([](auto _) { return val; })
+		.distinct_until_changed()
+		.subscribe([](auto v) {
+			UE_LOG(LogTemp, Warning, TEXT("val is changed to %d."), v);
+		});
+		
+	observable<>::interval(3.f, On_TG_PrePhysics)
 		.take_while([self](auto _) { return self.IsValid(); })
 		.subscribe([](auto _) {
-			UE_LOG(LogTemp, Warning, TEXT("Time out~"));
+			++val;
 		});
 }
 
