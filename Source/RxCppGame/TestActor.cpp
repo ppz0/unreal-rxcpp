@@ -19,23 +19,25 @@ void ATestActor::BeginPlay()
 
 	TWeakObjectPtr<AActor> self(this);
 
-	observable<>::everyframe(60, On_TG_PrePhysics)
+	observable<>::everyframe(30, On_TG_PrePhysics)
 		.take_while([self](auto _) { return self.IsValid(); })
 		.subscribe([](auto v) {
 			UE_LOG(LogTemp, Warning, TEXT("frame => %d"), v);
 		});
 		
-	// observable<>::everyframe(60, On_TG_PostPhysics)
-	// 	.take_while([self](auto _) { return self.IsValid(); })
-	// 	.subscribe([](auto v) {
-	// 		UE_LOG(LogTemp, Warning, TEXT("frame (Post) => %d"), v);
-	// 	});
+	observable<>::everyframe(60, On_TG_PostPhysics)
+		.take_while([self](auto _) { return self.IsValid(); })
+		.subscribe([](auto v) {
+			UE_LOG(LogTemp, Warning, TEXT("frame (Post) => %d"), v);
+		});
 
-	// observable<>::timer(5.f, On_TG_PostUpdateWork)
-	// 	.take_while([self](auto _) { return self.IsValid(); })
-	// 	.subscribe([](auto _) {
-	// 		UE_LOG(LogTemp, Warning, TEXT("Time out~"));
-	// 	});
+	observable<>::timer(5.f, On_TG_PostUpdateWork)
+		.take_while([self](auto _) { return self.IsValid(); })
+		.subscribe([](auto _) {
+			UE_LOG(LogTemp, Warning, TEXT("Time out~"));
+		}, []() {
+			UE_LOG(LogTemp, Warning, TEXT("Completed"));
+		});
 
 	static int val = 0;
 
