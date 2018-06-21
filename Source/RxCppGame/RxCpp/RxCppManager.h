@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 
 #include "UndefineMacros_UE_4.18.h"
+#define _CPPRTTI 0
+#define RXCPP_USE_RTTI 0
 #include "Rx/v2/src/rxcpp/rx.hpp"
 namespace Rx {
 using namespace rxcpp;
