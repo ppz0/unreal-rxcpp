@@ -24,11 +24,19 @@ void FRxCppManager::Init(UWorld* pWorld)
 
 void FRxCppManager::Destroy()
 {
+	//! Avoid the crash report on the application exit
+	if (GIsRunning == 0)
+		return;
+
 	for (auto p : TickFunctions)
 	{
 		p.Value->UnRegisterTickFunction();
 		delete p.Value;
 	}
+
+	FString test(TEXT("AAAA"));
+
+	test = "BBBB";
 
 	get_run_loop<TG_PrePhysics>().reset();
 	get_run_loop<TG_DuringPhysics>().reset();

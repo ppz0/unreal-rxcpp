@@ -8,6 +8,7 @@
 	},
 	"files.associations": {
 		"chrono": "cpp",
-		"*.rh": "cpp"
+		"*.rh": "cpp",
+		"resumable": "cpp"
 	}
 }
