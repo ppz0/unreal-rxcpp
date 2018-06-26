@@ -1,6 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "RxCppGame.h"
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, RxCppGame, "RxCppGame" );
+IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, RxCppGame, "RxCppGame");

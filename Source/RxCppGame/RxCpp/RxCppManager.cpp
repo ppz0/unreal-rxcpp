@@ -1,8 +1,8 @@
-// Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
-
 #include "RxCppManager.h"
 
-void FRxCppManager::Init(UWorld* pWorld)
+DEFINE_LOG_CATEGORY(RxCpp);
+
+void FRxCppManager::Init(UWorld *pWorld)
 {
 	TickFunctions.Add(TG_PrePhysics, new FRunLoopTickFunction());
 	TickFunctions.Add(TG_DuringPhysics, new FRunLoopTickFunction());
@@ -34,17 +34,13 @@ void FRxCppManager::Destroy()
 		delete p.Value;
 	}
 
-	FString test(TEXT("AAAA"));
-
-	test = "BBBB";
-
 	get_run_loop<TG_PrePhysics>().reset();
 	get_run_loop<TG_DuringPhysics>().reset();
 	get_run_loop<TG_PostPhysics>().reset();
 	get_run_loop<TG_PostUpdateWork>().reset();
 }
 
-void FRxCppManager::FRunLoopTickFunction::ExecuteTick(float DeltaTime, enum ELevelTick TickType, ENamedThreads::Type CurrentThread, const FGraphEventRef& MyCompletionGraphEvent)
+void FRxCppManager::FRunLoopTickFunction::ExecuteTick(float DeltaTime, enum ELevelTick TickType, ENamedThreads::Type CurrentThread, const FGraphEventRef &MyCompletionGraphEvent)
 {
 	if (TickGroup == TG_PrePhysics)
 	{

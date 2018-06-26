@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "TestActor.generated.h"
 
+
 UCLASS()
 class RXCPPGAME_API ATestActor : public AActor
 {

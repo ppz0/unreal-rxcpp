@@ -9,6 +9,9 @@
 	"files.associations": {
 		"chrono": "cpp",
 		"*.rh": "cpp",
-		"resumable": "cpp"
+		"resumable": "cpp",
+		"mutex": "cpp",
+		"future": "cpp",
+		"system_error": "cpp"
 	}
 }
