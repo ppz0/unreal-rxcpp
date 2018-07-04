@@ -34,6 +34,8 @@ void FRxCppManager::Destroy()
 		delete p.Value;
 	}
 
+	TickFunctions.Empty();
+
 	get_run_loop<TG_PrePhysics>().reset();
 	get_run_loop<TG_DuringPhysics>().reset();
 	get_run_loop<TG_PostPhysics>().reset();

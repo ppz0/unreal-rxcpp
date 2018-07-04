@@ -1,5 +1,6 @@
 #include "TestActor.h"
 #include "RxCpp/RxCppManager.h"
+#include "ContentLoader.h"
 
 
 ATestActor::ATestActor()
@@ -55,6 +56,12 @@ void ATestActor::BeginPlay()
 		.distinct_until_changed()
 		.subscribe([](auto v) {
 			UE_LOG(LogTemp, Warning, TEXT("val is changed to %d."), v);
+		});
+
+	AContentLoader::GetIntance(GetWorld()).LoadLevelStreaming(TEXT("/Game/StarterContent/Maps/TestMap"))
+		.subscribe([](auto vv) {
+			for (auto &l : vv)
+				UE_LOG(LogTemp, Warning, TEXT("ULevelStreaming '%s' is added"), *FPackageName::GetShortName(l->GetWorldAssetPackageFName()));
 		});
 }
 

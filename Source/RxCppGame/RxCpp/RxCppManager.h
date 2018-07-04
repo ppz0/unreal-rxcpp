@@ -23,8 +23,8 @@ namespace rxcpp
 template <ETickingGroup TickGroup>
 inline schedulers::run_loop &get_run_loop()
 {
-	if (TickGroup != TG_PrePhysics || TickGroup != TG_DuringPhysics || TickGroup != TG_PostPhysics || TickGroup  != TG_PostUpdateWork)
-		UE_LOG(RxCpp, Warning, TEXT("The given TickGroup is not running. Select one of { TG_PrePhysics, TG_DuringPhysics, TG_PostPhysics, TG_PostUpdateWork }."));
+	if (TickGroup != TG_PrePhysics && TickGroup != TG_DuringPhysics && TickGroup != TG_PostPhysics && TickGroup != TG_PostUpdateWork)
+		UE_LOG(RxCpp, Warning, TEXT("The given TickGroup is not running. Choose one of { TG_PrePhysics, TG_DuringPhysics, TG_PostPhysics, TG_PostUpdateWork }."));
 
 	static schedulers::run_loop rl;
 	return rl;
@@ -52,23 +52,23 @@ inline observe_on_one_worker &observe_on_tick_group()
 
 class FRxCppManager
 {
-  public:
+public:
 	inline static FRxCppManager &Instance()
 	{
 		static FRxCppManager m;
 		return m;
 	}
 
-  public:
+public:
 	void Init(UWorld *pWorld);
 	void Destroy();
 
-  public:
+public:
 	struct FRunLoopTickFunction : public FTickFunction
 	{
 		virtual void ExecuteTick(float DeltaTime, enum ELevelTick TickType, ENamedThreads::Type CurrentThread, const FGraphEventRef &MyCompletionGraphEvent) override;
 	};
 
-  private:
+private:
 	TMap<ETickingGroup, FRunLoopTickFunction *> TickFunctions;
 };
