@@ -16,28 +16,14 @@ class ULoadLevelStreamingCallback : public UObject
 
 public:
 	UFUNCTION()
-	void CallbackImpl()
-	{
-		if (--_levelStreamingCount == 0)
-		{
-			_isCompleted = true;
-
-			if (_pSubscriber && _pSubscriber->is_subscribed())
-			{
-				_pSubscriber->on_next(_levelStreamings);
-				_pSubscriber->on_completed();
-			}
-		}
-		
-		UE_LOG(LogTemp, Warning, TEXT("_levelCount set to %d."), _levelStreamingCount);
-	}
+	void CallbackImpl();
 
 public:
-	ULoadLevelStreamingCallback* Init(TArray<ULevelStreaming*>& levelStreamings, Rx::subscriber<TArray<ULevelStreaming*>>* pSubscriber)
+	ULoadLevelStreamingCallback* Init(TArray<ULevelStreaming*>& levelStreamings, const Rx::subscriber<TArray<ULevelStreaming*>>& subscriber)
 	{
 		_levelStreamings = levelStreamings;
 		_levelStreamingCount = levelStreamings.Num();
-		_pSubscriber = pSubscriber;
+		_subscriberHolder.Add(subscriber);
 		_isCompleted = false;
 
 		return this;
@@ -59,7 +45,7 @@ private:
 	bool _isCompleted;
 	int32 _levelStreamingCount;
 	TArray<ULevelStreaming*> _levelStreamings;
-	Rx::subscriber<TArray<ULevelStreaming*>>* _pSubscriber;
+	TArray<Rx::subscriber<TArray<ULevelStreaming*>>> _subscriberHolder;
 };
 
 //* */
@@ -73,6 +59,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void BeginDestroy() override;
 
 #pragma region 싱글턴
 public:
@@ -95,13 +82,17 @@ private:
 #pragma endregion
 
 public:
-	Rx::observable<TArray<ULevelStreaming*>> LoadLevelStreaming(const FString& packagePath);
+	Rx::observable<TArray<ULevelStreaming*>> LoadLevelStreaming(const FString& packagePath, bool bMakeVisibleAfterLoad = false);
 
 private:
 	//* UPackage 에셋 내부의 ULevelStreaming Object를 추출하여 리턴
 	UFUNCTION(BlueprintCallable)
 	TArray<ULevelStreaming*> GetLevelStreamingFromPackage(const FString& packagePath);
 
+	//** Creates a new instance of this streaming level with a provided unique instance name (LevelStreaming.h에서 발췌함)
+	UFUNCTION(BlueprintCallable)
+	ULevelStreaming* CreateInstance(ULevelStreaming* pSourceLevel, FString UniqueInstanceName);
+	
 	UPROPERTY(Transient)
 	TArray<ULoadLevelStreamingCallback*> _loadLevelStreamingCallbacks;
 };
