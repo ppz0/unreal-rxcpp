@@ -3,12 +3,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Engine/LevelStreaming.h"
+#include "Engine/StreamableManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "RxCpp/RxCppManager.h"
 #include "ContentLoader.generated.h"
 
 
-//* UGameplayStatics::LoadStreamLevel() 메소드 콜백 타겟 */
+//* UGameplayStatics::LoadStreamLevel() 콜백 타겟 */
 UCLASS()
 class ULoadLevelStreamingCallback : public UObject
 {
@@ -19,12 +20,13 @@ public:
 	void CallbackImpl();
 
 public:
-	ULoadLevelStreamingCallback* Init(TArray<ULevelStreaming*>& levelStreamings, const Rx::subscriber<TArray<ULevelStreaming*>>& subscriber)
+	ULoadLevelStreamingCallback* Init(TArray<ULevelStreaming*>& levelStreamings, const Rx::subscriber<TArray<ULevelStreaming*>>& subscriber, UObject* pWorldContextObj)
 	{
+		_isCompleted = false;
+		_pWorldContextObj = pWorldContextObj;
 		_levelStreamings = levelStreamings;
 		_levelStreamingCount = levelStreamings.Num();
 		_subscriberHolder.Add(subscriber);
-		_isCompleted = false;
 
 		return this;
 	}
@@ -36,19 +38,48 @@ public:
 		return FLatentActionInfo(0, ++UUIDNum, TEXT("CallbackImpl"), this);
 	}
 
-	bool IsCompleted()
-	{
-		return _isCompleted;
-	}
+	bool IsCompleted() { return _isCompleted; }
 
 private:
 	bool _isCompleted;
 	int32 _levelStreamingCount;
+	UObject* _pWorldContextObj;
 	TArray<ULevelStreaming*> _levelStreamings;
 	TArray<Rx::subscriber<TArray<ULevelStreaming*>>> _subscriberHolder;
+	
+friend class AContentLoader;
 };
 
-//* */
+
+//* FStreamableManager::RequestAsyncLoad() 콜백 타겟 */
+struct FStreamableDelegateCallback
+{
+public:
+	void CallbackImpl();
+
+public:
+	FStreamableDelegateCallback(const FString& objectPath, const Rx::subscriber<UObject*>& subscriber, UObject* pWorldContextObj) : _softObjectPtr(objectPath) 
+	{
+		_isCompleted = false;
+		_pWorldContextObj = pWorldContextObj;
+		_subscriberHolder.Add(subscriber);
+	}
+
+	UObject* GetUObject() { return _softObjectPtr.Get(); }
+	bool IsCompleted() { return _isCompleted; }
+	
+private:
+	bool _isCompleted;
+	UObject* _pWorldContextObj;
+	TSoftObjectPtr<UObject> _softObjectPtr;
+	TSharedPtr<FStreamableHandle> _streamableHandle;
+	TArray<Rx::subscriber<UObject*>> _subscriberHolder;
+	
+friend class AContentLoader;
+};
+
+
+//* Content 폴더 이하에 존재하는 에셋 로더 */
 UCLASS()
 class RXCPPGAME_API AContentLoader : public AActor
 {
@@ -83,6 +114,17 @@ private:
 
 public:
 	Rx::observable<TArray<ULevelStreaming*>> LoadLevelStreaming(const FString& packagePath, bool bMakeVisibleAfterLoad = false);
+	Rx::observable<UObject*> LoadUObject(const FString& objectPath);
+
+	//* LoadUObject() 템플릿 버전 */
+	template <typename T>
+	Rx::observable<T*, Rx::dynamic_observable<T*>> LoadTObject(const FString& objectPath)
+	{
+		return LoadUObject(objectPath).map([](auto v) { return (T*)v; }).as_dynamic();
+	}
+
+public:
+	void ClearCompletedCallbacks();
 
 private:
 	//* UPackage 에셋 내부의 ULevelStreaming Object를 추출하여 리턴
@@ -95,4 +137,7 @@ private:
 	
 	UPROPERTY(Transient)
 	TArray<ULoadLevelStreamingCallback*> _loadLevelStreamingCallbacks;
+
+	FStreamableManager _streamableManager;
+	TMap<FString, FStreamableDelegateCallback> _streamableDelegateCallbacks;
 };

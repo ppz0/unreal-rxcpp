@@ -58,8 +58,13 @@ void ATestActor::BeginPlay()
 	// // 		UE_LOG(LogTemp, Warning, TEXT("val is changed to %d."), v);
 	// // 	});
 
+	AContentLoader::GetIntance(GetWorld()).LoadTObject<UTexture2D>("/Game/StarterContent/Textures/T_Brick_Cut_Stone_N")
+		.subscribe([](auto v) {
+			if (v != nullptr)
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *(v->GetFullName()));
+		});
+
 	AContentLoader::GetIntance(GetWorld()).LoadLevelStreaming(TEXT("/Game/StarterContent/Maps/TestMap"), true)
-		// .take_while([self](auto _) { return self.IsValid(); })
 		.subscribe([](auto vv) {
 			for (auto &l : vv)
 				UE_LOG(LogTemp, Warning, TEXT("ULevelStreaming '%s' is loaded"), *FPackageName::GetShortName(l->GetWorldAssetPackageFName()));

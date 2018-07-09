@@ -9,14 +9,38 @@ void ULoadLevelStreamingCallback::CallbackImpl()
 	{
 		_isCompleted = true;
 
-		if (_subscriberHolder.Num() > 0)
-		{
-			_subscriberHolder.Last().on_next(_levelStreamings);
-			_subscriberHolder.Last().on_completed();
-		}
+		_subscriberHolder.Last().on_next(_levelStreamings);
+		_subscriberHolder.Last().on_completed();
+		
+		AContentLoader::GetIntance(_pWorldContextObj).ClearCompletedCallbacks();
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("_levelCount set to %d."), _levelStreamingCount);
+}
+
+void FStreamableDelegateCallback::CallbackImpl() 
+{
+	auto* pObject = GetUObject();
+	
+	if (pObject != nullptr)
+	{
+		_subscriberHolder.Last().on_next(pObject);
+		_subscriberHolder.Last().on_completed();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("'%s' in invalid."), *_softObjectPtr.ToString());
+
+#if WITH_EDITOR
+		//* 크래시 방지를 위해서 EDITOR 모드이면 on_next() 호출
+		_subscriberHolder.Last().on_next(nullptr);
+		_subscriberHolder.Last().on_completed();
+#else
+		_subscriberHolder.Last().on_error(std::make_exception_ptr(std::exception("invalid uobject")));
+#endif
+	}
+	
+	_isCompleted = true;
 }
 
 AContentLoader::AContentLoader()
@@ -42,16 +66,29 @@ Rx::observable<TArray<ULevelStreaming*>> AContentLoader::LoadLevelStreaming(cons
 	//! 이전 LoadLevelStreaming은 삭제 (동시에 2개 이상의 요청을 할 수 없음을 의미함)
 	_loadLevelStreamingCallbacks.Empty();
 
-	return Rx::observable<>::create<TArray<ULevelStreaming *>>([&, this](Rx::subscriber<TArray<ULevelStreaming*>> s) {
+	return Rx::observable<>::create<TArray<ULevelStreaming*>>([&, this](Rx::subscriber<TArray<ULevelStreaming*>> s) {
 		auto streamingLevels = GetLevelStreamingFromPackage(packagePath);
 
 		if (streamingLevels.Num() < 0)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("'%s' has 0 LevelStreaming"), *packagePath);
+			UE_LOG(LogTemp, Warning, TEXT("'%s' has 0 LevelStreaming (or package is invalid)."), *packagePath);
+			
+#if WITH_EDITOR
+			//* 크래시 방지를 위해서 EDITOR 모드이면 on_next() 호출
+			if (s.is_subscribed())
+			{
+				s.on_next(streamingLevels);
+				s.on_completed();
+			}
+#else
+			if (s.is_subscribed())
+				s.on_error(std::make_exception_ptr(std::exception("invalid map")));
+#endif
+
 			return;
 		}
 
-		auto* pCallback = NewObject<ULoadLevelStreamingCallback>()->Init(streamingLevels, s);
+		auto* pCallback = NewObject<ULoadLevelStreamingCallback>()->Init(streamingLevels, s, GetWorld());
 
 		_loadLevelStreamingCallbacks.Add(pCallback);
 		
@@ -95,18 +132,7 @@ TArray<ULevelStreaming*> AContentLoader::GetLevelStreamingFromPackage(const FStr
 	}
 
 	for (auto &l : pWorld->StreamingLevels)
-	{
-		// // //* 에디터 모드면 RenameForPIE() 메소드를 호출하여 이름을 변경해준다
-		// // if (GIsPlayInEditorWorld) 
-		// // {
-		// // 	auto prevName = l->GetWorldAssetPackageName();
-		// // 	l->RenameForPIE(GetWorld()->GetOutermost()->PIEInstanceID);
-
-		// // 	UE_LOG(LogTemp, Warning, TEXT("ULevelStreaming '%s' is renamed to '%s'"), *prevName, *l->GetWorldAssetPackageName());
-		// // }
-
 		ret.Add(CreateInstance(l, l->GetWorldAssetPackageName()));
-	}
 
 	return ret;
 }
@@ -147,4 +173,34 @@ ULevelStreaming* AContentLoader::CreateInstance(ULevelStreaming* pSourceLevel, F
 	}
 	
 	return StreamingLevelInstance;
+}
+
+Rx::observable<UObject*> AContentLoader::LoadUObject(const FString& objectPath)
+{
+	return Rx::observable<>::create<UObject*>([&, this](Rx::subscriber<UObject*> s) {
+		_streamableDelegateCallbacks.Add(objectPath, FStreamableDelegateCallback(objectPath, s, GetWorld()));
+
+		_streamableDelegateCallbacks[objectPath]._streamableHandle = _streamableManager.RequestAsyncLoad(
+			FSoftObjectPath(objectPath), 
+			FStreamableDelegate::CreateRaw(&(_streamableDelegateCallbacks[objectPath]), &FStreamableDelegateCallback::CallbackImpl)
+			);
+
+		if (!_streamableDelegateCallbacks[objectPath]._streamableHandle.IsValid())
+			_streamableDelegateCallbacks[objectPath].CallbackImpl();
+	});
+}
+
+void AContentLoader::ClearCompletedCallbacks()
+{
+	_loadLevelStreamingCallbacks.RemoveAll([](auto v) { return v->_isCompleted; });
+
+	TArray<FString> keys;
+
+	_streamableDelegateCallbacks.GenerateKeyArray(keys);
+
+	for (auto& k : keys)
+	{
+		if (_streamableDelegateCallbacks[k]._isCompleted)
+			_streamableDelegateCallbacks.Remove(k);
+	}
 }
