@@ -1,5 +1,14 @@
 #pragma once
 
+//! Depress complier error warnings
+#pragma warning(disable:4503)
+#pragma warning(disable:4530)
+#pragma warning(disable:4577)
+
+//! Depress complier error on packaging
+#pragma warning(disable:4530)
+#pragma warning(disable:4577)
+
 #include "CoreMinimal.h"
 
 #include "UndefineMacros_UE_4.18.h"
@@ -50,17 +59,47 @@ inline observe_on_one_worker &observe_on_tick_group()
 #define On_TG_PostPhysics observe_on_tick_group<TG_PostPhysics>()
 #define On_TG_PostUpdateWork observe_on_tick_group<TG_PostUpdateWork>()
 
+//* observable<>::everyframe Helper
+#define RX_EVERYFRAME(x) observable<>::everyframe(x, On_TG_PrePhysics)
+#define RX_EVERYFRAME_WITH(x, owner) observable<>::everyframe(x, On_TG_PrePhysics).take_while([owner](auto _) { return owner.IsValid(); })
+
+//* observable<>::timer Helper
+#define RX_TIMER(x)	observable<>::timer(x, On_TG_PrePhysics)
+#define RX_TIMER_WITH(x, owner) observable<>::timer(x, On_TG_PrePhysics).take_while([owner](auto _) { return owner.IsValid(); })
+
+//* NextFrame macro ('0' duration observable<>::timer)
+#define RX_NEXTFRAME() observable<>::timer(TNumericLimits<float>::Min, On_TG_PrePhysics)
+#define RX_NEXTFRAME_WITH(owner) observable<>::timer(TNumericLimits<float>::Min, On_TG_PrePhysics).take_while([owner](auto _) { return owner.IsValid(); })
+
+//* Bypass subscribe callback to LatentAction
+#define SUBSCRIBE_ON_LATENT_ACTION(latent, next)\
+	subscribe([next](auto v) {\
+		next.ExecuteIfBound(v);\
+	}, [latent]() {\
+		if (IsValid(latent.CallbackTarget) && latent.ExecutionFunction != NAME_None && latent.Linkage != INDEX_NONE) {\
+			if (auto f = latent.CallbackTarget->FindFunction(latent.ExecutionFunction))\
+				latent.CallbackTarget->ProcessEvent(f, (void*)&(latent.Linkage));\
+		}\
+	})
+
 class FRxCppManager
 {
+#pragma region Singleton
 public:
 	inline static FRxCppManager &Instance()
 	{
 		static FRxCppManager m;
 		return m;
 	}
+#pragma endregion
+
+	const UWorld* pWorld;
+	
+public:
+	FRxCppManager() : pWorld(nullptr) {}
 
 public:
-	void Init(UWorld *pWorld);
+	void Init(const UWorld *pWorld);
 	void Destroy();
 
 public:
@@ -70,5 +109,5 @@ public:
 	};
 
 private:
-	TMap<ETickingGroup, FRunLoopTickFunction *> TickFunctions;
+	TMap<ETickingGroup, FRunLoopTickFunction*> _tickFunctions;
 };
