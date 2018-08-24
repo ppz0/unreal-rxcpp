@@ -1,6 +1,7 @@
 #include "TestActor.h"
 #include "RxCpp/RxCppManager.h"
 #include "RxCpp/RxCppLoader.h"
+#include "RxCpp/RxCppInput.h"
 
 
 ATestActor::ATestActor()
@@ -68,6 +69,51 @@ void ATestActor::BeginPlay()
 		.subscribe([](auto vv) {
 			for (auto &l : vv)
 				UE_LOG(LogTemp, Warning, TEXT("ULevelStreaming '%s' is loaded"), *FPackageName::GetShortName(l->GetWorldAssetPackageFName()));
+		});
+
+	ARxCppInput::Instance().KeyPressed(EKeys::A)
+		.subscribe([this](auto _) {
+			UE_LOG(LogTemp, Warning, TEXT("A is pressed~"));
+
+			testFSM.SetState(ETestStates::Busy);
+		});
+		
+	ARxCppInput::Instance().KeyReleased(EKeys::B)
+		.subscribe([this](auto _) {
+			UE_LOG(LogTemp, Warning, TEXT("B is releaseed~"));
+			
+			testFSM.SetState(ETestStates::Idle);
+		});
+		
+	ARxCppInput::Instance().KeyRepeated(EKeys::C)
+		.subscribe([](auto _) {
+			UE_LOG(LogTemp, Warning, TEXT("C is repeated~"));
+		});
+
+	ARxCppInput::Instance().Axis(TEXT("NewAxisMapping_0"))
+		.filter([](auto v) { return !FMath::IsNearlyZero(v); })
+		.subscribe([](auto v) {
+			UE_LOG(LogTemp, Warning, TEXT("NewAxisMapping_0: %f"), v);
+		});
+		
+	ARxCppInput::Instance().Axis(TEXT("NewAxisMapping_1"))
+		.filter([](auto v) { return !FMath::IsNearlyZero(v); })
+		.subscribe([](auto v) {
+			UE_LOG(LogTemp, Warning, TEXT("NewAxisMapping_1: %f"), v);
+		});
+
+	testFSM.ListenOnEnter(ETestStates::Busy)
+		.subscribe([this](auto prev) {
+			if (prev == ETestStates::Idle) {
+				UE_LOG(LogTemp, Warning, TEXT("Enter ETestStates::Busy"));
+			}
+		});
+
+	testFSM.ListenOnExit(ETestStates::Busy)
+		.subscribe([this](auto next) {
+			if (next == ETestStates::Idle) {
+				UE_LOG(LogTemp, Warning, TEXT("Leave ETestStates::Busy"));
+			}
 		});
 }
 

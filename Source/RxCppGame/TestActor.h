@@ -2,7 +2,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "FSM.h"
 #include "TestActor.generated.h"
+
+
+UENUM(BlueprintType)
+enum class ETestStates : uint8
+{
+	Idle,
+	Busy,
+	GameOver
+};
 
 
 UCLASS()
@@ -23,5 +33,8 @@ public:
 	/** Send request using latent action */ 
 	UFUNCTION(BlueprintCallable, meta = (Latent, LatentInfo = "LatentInfo", HidePin = "WCO", DefaultToSelf = "WCO")) 
 		virtual void TestLatentAction(UObject* WCO, struct FLatentActionInfo LatentInfo, FTestLatentAction_OnNext OnNext);
+
+public:
+	FSM<ETestStates> testFSM;
 	
 };

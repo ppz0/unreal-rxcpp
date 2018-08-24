@@ -59,19 +59,23 @@ inline observe_on_one_worker &observe_on_tick_group()
 #define On_TG_PostPhysics observe_on_tick_group<TG_PostPhysics>()
 #define On_TG_PostUpdateWork observe_on_tick_group<TG_PostUpdateWork>()
 
-//* observable<>::everyframe Helper
+//* Helper macro for observable<>::everyframe
 #define RX_EVERYFRAME(x) observable<>::everyframe(x, On_TG_PrePhysics)
 #define RX_EVERYFRAME_WITH(x, owner) observable<>::everyframe(x, On_TG_PrePhysics).take_while([owner](auto _) { return owner.IsValid(); })
 
-//* observable<>::timer Helper
-#define RX_TIMER(x)	observable<>::timer(x, On_TG_PrePhysics)
-#define RX_TIMER_WITH(x, owner) observable<>::timer(x, On_TG_PrePhysics).take_while([owner](auto _) { return owner.IsValid(); })
-
-//* NextFrame macro ('0' duration observable<>::timer)
+//* NextFrame macro ('Zero' duration observable<>::timer)
 #define RX_NEXTFRAME() observable<>::timer(TNumericLimits<float>::Min, On_TG_PrePhysics)
 #define RX_NEXTFRAME_WITH(owner) observable<>::timer(TNumericLimits<float>::Min, On_TG_PrePhysics).take_while([owner](auto _) { return owner.IsValid(); })
 
-//* Bypass subscribe callback to LatentAction
+//* Helper macro for observable<>::timer
+#define RX_TIMER(x)	observable<>::timer(x, On_TG_PrePhysics)
+#define RX_TIMER_WITH(x, owner) observable<>::timer(x, On_TG_PrePhysics).take_while([owner](auto _) { return owner.IsValid(); })
+
+//* Helper macro for observable<>::interval
+#define RX_INTERVAL(x)	observable<>::interval(x, On_TG_PrePhysics)
+#define RX_INTERVAL_WITH(x, owner) observable<>::interval(x, On_TG_PrePhysics).take_while([owner](auto _) { return owner.IsValid(); })
+
+//* Subscribe macro which Bypasses subscribe callback to LatentAction
 #define SUBSCRIBE_ON_LATENT_ACTION(latent, next)\
 	subscribe([next](auto v) {\
 		next.ExecuteIfBound(v);\

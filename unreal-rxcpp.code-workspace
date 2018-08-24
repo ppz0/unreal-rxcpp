@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "C:\\Program Files\\Epic Games\\UE_4.18\\Engine\\Source\\Runtime"
+		}
+	],
+	"settings": {
+		"typescript.tsc.autoDetect": "off",
+		"files.associations": {
+			"chrono": "cpp",
+			"*.rh": "cpp",
+			"resumable": "cpp",
+			"mutex": "cpp",
+			"future": "cpp",
+			"system_error": "cpp",
+			"xlocale": "cpp",
+			"xutility": "cpp",
+			"iosfwd": "cpp"
+		}
+	}
+}
