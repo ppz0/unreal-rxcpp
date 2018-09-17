@@ -2,6 +2,19 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "Run RxCppGame project",
+			"group": "build",
+			"command": "Engine\\Binaries\\Win64\\UE4Editor.exe",
+			"args": [
+				"${workspaceFolder}/RxCppGame.uproject"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:/Program Files/Epic Games/UE_4.18"
+			},
+			"problemMatcher": []
+		},
+		{
 			"taskName": "RxCppGame Win64 Debug Build",
 			"group": "build",
 			"command": "Engine\\Build\\BatchFiles\\Build.bat",

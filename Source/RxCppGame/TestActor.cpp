@@ -16,25 +16,22 @@ void ATestActor::BeginPlay()
 	//* Initializes RxCppManager
     FRxCppManager::Instance().Init(GetWorld());
 
-	TWeakObjectPtr<AActor> self(this);
+	// TWeakObjectPtr<AActor> self(this);
 
 	// //* Every 30 frames which registered in TG_PrePhysics tick group, call the lambda in subscribe() method.
-	observable<>::everyframe(30, On_TG_PrePhysics)
-		.take_while([self](auto _) { return self.IsValid(); })
+	observable<>::everyframe(30, On_TG_PrePhysics).is_valid(this)
 		.subscribe([](auto v) {
 			UE_LOG(LogTemp, Warning, TEXT("frame => %d"), v);
 		});
 		
 	//* Here, every 60 frames in TG_PostPhysics tick group.
-	observable<>::everyframe(60, On_TG_PostPhysics)
-		.take_while([self](auto _) { return self.IsValid(); })
+	observable<>::everyframe(60, On_TG_PostPhysics).is_valid(this)
 		.subscribe([](auto v) {
 			UE_LOG(LogTemp, Warning, TEXT("frame (Post) => %d"), v);
 		});
 
 	//* After 5 seconds, call the lambda in subscribe() method. (Actually executed in TG_PostUpdateWork tick group)
-	observable<>::timer(5.f, On_TG_PostUpdateWork)
-		.take_while([self](auto _) { return self.IsValid(); })
+	observable<>::timer(5.f, On_TG_PostUpdateWork).is_valid(this)
 		.subscribe([](auto _) {
 			UE_LOG(LogTemp, Warning, TEXT("Time out~"));
 		}, []() {
@@ -44,15 +41,13 @@ void ATestActor::BeginPlay()
 	static int val = 0;
 
 	//* Every 3 seconds, call the  lambda in subscribe() method.
-	observable<>::interval(3.f, On_TG_PrePhysics)
-		.take_while([self](auto _) { return self.IsValid(); })
+	observable<>::interval(3.f, On_TG_PrePhysics).is_valid(this)
 		.subscribe([](auto _) {
 			++val;
 		});
 
 	//* Watch 'val' and when it's value changed, call the  lambda in subscribe() method.
-	observable<>::everyframe(1, On_TG_PrePhysics)
-		.take_while([self](auto _) { return self.IsValid(); })
+	observable<>::everyframe(1, On_TG_PrePhysics).is_valid(this)
 		.map([](auto _) { return val; })
 		.distinct_until_changed()
 		.subscribe([](auto v) {

@@ -1,5 +1,9 @@
 {
 	"typescript.tsc.autoDetect": "off",
+	"jake.autoDetect": "off",
+	"grunt.autoDetect": "off",
+	"npm.autoDetect": "off",
+	"gulp.autoDetect": "off",
 	"files.exclude": {
 		"**/.git": true,
 		"**/.vscode": false,
@@ -13,5 +17,9 @@
 		"mutex": "cpp",
 		"future": "cpp",
 		"system_error": "cpp"
-	}
+	},
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"search.useIgnoreFiles": false,
+	"C_Cpp.intelliSenseEngine": "Tag Parser",
 }

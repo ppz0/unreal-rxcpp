@@ -207,6 +207,7 @@
 #include "operators/rx-flat_map.hpp"
 #include "operators/rx-group_by.hpp"
 #include "operators/rx-ignore_elements.hpp"
+#include "operators/rx-is_valid.hpp"
 #include "operators/rx-map.hpp"
 #include "operators/rx-merge.hpp"
 #include "operators/rx-merge_delay_error.hpp"

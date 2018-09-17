@@ -1155,6 +1155,17 @@ public:
     {
         return  observable_member(ignore_elements_tag{},                *this, std::forward<AN>(an)...);
     }
+	
+    /*! @copydoc rx-is_valid.hpp
+     */
+    template<class... AN>
+    auto is_valid(AN... an) const
+        /// \cond SHOW_SERVICE_MEMBERS
+        -> decltype(observable_member(is_valid_tag{}, *(this_type*)nullptr, std::forward<AN>(an)...))
+        /// \endcond
+    {
+        return      observable_member(is_valid_tag{},                *this, std::forward<AN>(an)...);
+    }
 
     /*! @copydoc rx-muticast.hpp
      */

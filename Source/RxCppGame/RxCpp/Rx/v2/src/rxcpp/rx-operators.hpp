@@ -245,6 +245,13 @@ struct ignore_elements_tag {
     };
 };
 
+struct is_valid_tag {
+    template<class Included>
+    struct include_header{
+        static_assert(Included::value, "missing include: please #include <rxcpp/operators/rx-is_valid.hpp>");
+    };
+};
+
 struct map_tag {
     template<class Included>
     struct include_header{
