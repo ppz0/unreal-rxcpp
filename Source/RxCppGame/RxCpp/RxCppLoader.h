@@ -165,7 +165,7 @@ private:
 	ULevelStreaming* CreateInstance(ULevelStreaming* pSourceLevel, FString UniqueInstanceName);
 	
 	UPROPERTY(Transient)
-		TArray<ULoadLevelStreamingCallback*> _loadLevelStreamingCallbacks;
+		TArray<ULoadLevelStreamingCallback*> _levelStreamingCallbacks;
 
 	FStreamableManager _streamableManager;
 	TMap<FString, FStreamableDelegateCallback> _streamableDelegateCallbacks;

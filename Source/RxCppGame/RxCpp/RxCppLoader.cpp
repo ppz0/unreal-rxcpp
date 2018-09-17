@@ -5,10 +5,10 @@ void ULoadLevelStreamingCallback::CallbackImpl()
 	--_levelStreamingCount;
 
 	if (!IsUnloading()) {
-		UE_LOG(RxCpp, Warning, TEXT("ULoadLevelStreamingCallback => Loading %s... _levelCount set to %d."), *_packageName, _levelStreamingCount);
+		UE_LOG(RxCpp, Log, TEXT("ULoadLevelStreamingCallback => Loading %s... _levelCount set to %d."), *_packageName, _levelStreamingCount);
 	}
 	else {
-		UE_LOG(RxCpp, Warning, TEXT("ULoadLevelStreamingCallback => Unloading %s... _levelCount set to %d."), *_packageName, _levelStreamingCount);
+		UE_LOG(RxCpp, Log, TEXT("ULoadLevelStreamingCallback => Unloading %s... _levelCount set to %d."), *_packageName, _levelStreamingCount);
 	}
 
 	if (_levelStreamingCount == 0)
@@ -33,7 +33,7 @@ void ULoadLevelStreamingCallback::CallbackImpl()
 					if (_pWorldContextObj->GetWorld()->StreamingLevels.Contains(l))
 					{
 						_pWorldContextObj->GetWorld()->StreamingLevels.Remove(l);
-						UE_LOG(RxCpp, Warning, TEXT("ULoadLevelStreamingCallback => '%s' is removed from GetWorld()->StreamingLevels."), *(l->GetWorldAssetPackageName()));
+						UE_LOG(RxCpp, Log, TEXT("ULoadLevelStreamingCallback => '%s' is removed from GetWorld()->StreamingLevels."), *(l->GetWorldAssetPackageName()));
 					}
 				}
 			}
@@ -84,8 +84,29 @@ void ARxCppLoader::BeginDestroy()
 
 Rx::observable<TArray<ULevelStreaming*>> ARxCppLoader::LoadLevelStreaming(const FString& packageName, bool bMakeVisibleAfterLoad)
 {
-	//! 이전 LoadLevelStreaming은 삭제 (동시에 2개 이상의 요청을 할 수 없음을 의미함)
-	_loadLevelStreamingCallbacks.Empty();
+	//! 동시에 2개 이상의 스트리밍 요청을 할 수 없음
+	if (_levelStreamingCallbacks.Num() > 0)
+	{
+		return Rx::observable<>::create<TArray<ULevelStreaming*>>([=, this](Rx::subscriber<TArray<ULevelStreaming*>> s) {
+			UE_LOG(RxCpp, Warning, TEXT("ARxCppLoader => LoadLevelStreaming '%s' has called while other streaming is processed."), *packageName);
+			
+#if WITH_EDITOR
+			//* 크래시 방지를 위해서 EDITOR 모드이면 on_next() 호출
+			if (s.is_subscribed())
+			{
+				TArray<ULevelStreaming*> loadStreamingLevels;
+
+				s.on_next(loadStreamingLevels);
+				s.on_completed();
+			}
+#else
+			if (s.is_subscribed())
+				s.on_error(std::make_exception_ptr(std::exception("streaming processed is overlapped")));
+#endif
+		});
+	}
+
+	// _levelStreamingCallbacks.Empty();
 
 	auto adjustPackageName = ConvertToWorldAssetPackageName(packageName);
 
@@ -114,11 +135,12 @@ Rx::observable<TArray<ULevelStreaming*>> ARxCppLoader::LoadLevelStreaming(const 
 		}
 
 		TArray<ULevelStreaming*> loadStreamingLevels;
+
 		loadStreamingLevels.Add(this->GetWorld()->StreamingLevels[found]);
 
 		auto* pCallback = NewObject<ULoadLevelStreamingCallback>()->Init(loadStreamingLevels, s, GetWorld(), adjustPackageName);
 
-		_loadLevelStreamingCallbacks.Add(pCallback);
+		_levelStreamingCallbacks.Add(pCallback);
 		
 		UGameplayStatics::LoadStreamLevel(GetWorld(), 
 			FName(*FPackageName::GetShortName(loadStreamingLevels[0]->GetWorldAssetPackageFName())), bMakeVisibleAfterLoad, false, 
@@ -129,8 +151,29 @@ Rx::observable<TArray<ULevelStreaming*>> ARxCppLoader::LoadLevelStreaming(const 
 
 Rx::observable<TArray<ULevelStreaming*>> ARxCppLoader::LoadMap(const FString &packageName, bool bMakeVisibleAfterLoad)
 {
-	//! 이전 LoadLevelStreaming은 삭제 (동시에 2개 이상의 요청을 할 수 없음을 의미함)
-	_loadLevelStreamingCallbacks.Empty();
+	//! 동시에 2개 이상의 스트리밍 요청을 할 수 없음
+	if (_levelStreamingCallbacks.Num() > 0)
+	{
+		return Rx::observable<>::create<TArray<ULevelStreaming*>>([=, this](Rx::subscriber<TArray<ULevelStreaming*>> s) {
+			UE_LOG(RxCpp, Warning, TEXT("ARxCppLoader => LoadMap '%s' has called while other streaming is processed."), *packageName);
+			
+#if WITH_EDITOR
+			//* 크래시 방지를 위해서 EDITOR 모드이면 on_next() 호출
+			if (s.is_subscribed())
+			{
+				TArray<ULevelStreaming*> loadStreamingLevels;
+
+				s.on_next(loadStreamingLevels);
+				s.on_completed();
+			}
+#else
+			if (s.is_subscribed())
+				s.on_error(std::make_exception_ptr(std::exception("streaming processed is overlapped")));
+#endif
+		});
+	}
+
+	// _levelStreamingCallbacks.Empty();
 
 	return Rx::observable<>::create<TArray<ULevelStreaming*>>([=, this](Rx::subscriber<TArray<ULevelStreaming*>> s) {
 		TArray<ULevelStreaming*> loadStreamingLevels;
@@ -189,7 +232,7 @@ Rx::observable<TArray<ULevelStreaming*>> ARxCppLoader::LoadMap(const FString &pa
 
 		auto* pCallback = NewObject<ULoadLevelStreamingCallback>()->Init(loadStreamingLevels, s, GetWorld(), packageName);
 
-		_loadLevelStreamingCallbacks.Add(pCallback);
+		_levelStreamingCallbacks.Add(pCallback);
 		
 		for (auto &l : loadStreamingLevels)
 		{
@@ -197,7 +240,7 @@ Rx::observable<TArray<ULevelStreaming*>> ARxCppLoader::LoadMap(const FString &pa
 			{
 				GetWorld()->StreamingLevels.Add(l);
 
-				UE_LOG(RxCpp, Warning, TEXT("ARxCppLoader => ULevelStreaming '%s' is added"), *FPackageName::GetShortName(l->GetWorldAssetPackageFName()));
+				UE_LOG(RxCpp, Log, TEXT("ARxCppLoader => ULevelStreaming '%s' is added"), *FPackageName::GetShortName(l->GetWorldAssetPackageFName()));
 			}
 
 			UGameplayStatics::LoadStreamLevel(GetWorld(), 
@@ -205,18 +248,45 @@ Rx::observable<TArray<ULevelStreaming*>> ARxCppLoader::LoadMap(const FString &pa
 				pCallback->GetLatentActionInfo()
 				);
 				
-			UE_LOG(RxCpp, Warning, TEXT("ARxCppLoader => LoadStreamLevel() is called on ULevelStreaming '%s'"), *FPackageName::GetShortName(l->GetWorldAssetPackageFName()));
+			UE_LOG(RxCpp, Log, TEXT("ARxCppLoader => LoadStreamLevel() is called on ULevelStreaming '%s'"), *FPackageName::GetShortName(l->GetWorldAssetPackageFName()));
 		}
 	}).as_dynamic();
 }
 
 Rx::observable<bool> ARxCppLoader::UnloadLevelStreaming(TArray<ULevelStreaming*> unloadingLevels, bool removeAfterUnload, FString packageName)
 {
-	//! 이전 LoadLevelStreaming은 삭제 (동시에 2개 이상의 요청을 할 수 없음을 의미함)
-	_loadLevelStreamingCallbacks.Empty();
+	//! 동시에 2개 이상의 스트리밍 요청을 할 수 없음
+	if (_levelStreamingCallbacks.Num() > 0)
+	{
+		return Rx::observable<>::create<bool>([=, this](Rx::subscriber<bool> s) {
+			UE_LOG(RxCpp, Warning, TEXT("ARxCppLoader => UnloadLevelStreaming '%s' has called while other streaming is processed."), *packageName);
+			
+#if WITH_EDITOR
+			//* 크래시 방지를 위해서 EDITOR 모드이면 on_next() 호출
+			if (s.is_subscribed())
+			{
+				s.on_next(false);
+				s.on_completed();
+			}
+#else
+			if (s.is_subscribed())
+				s.on_error(std::make_exception_ptr(std::exception("streaming processed is overlapped")));
+#endif
+		});
+	}
+
+	// _levelStreamingCallbacks.Empty();
 	
 	return Rx::observable<>::create<bool>([=, this](Rx::subscriber<bool> s) {
-		if (unloadingLevels.Num() == 0)
+		TArray<ULevelStreaming*> unloadStreamingLevels;
+
+		for (auto &l : unloadingLevels)
+		{
+			if (l->IsLevelLoaded())
+				unloadStreamingLevels.Add(l);
+		}
+
+		if (unloadStreamingLevels.Num() == 0)
 		{
 			UE_LOG(RxCpp, Warning, TEXT("ARxCppLoader => Unloading %s... unloadingLevels size is 0"), *packageName);
 			
@@ -226,26 +296,21 @@ Rx::observable<bool> ARxCppLoader::UnloadLevelStreaming(TArray<ULevelStreaming*>
 				s.on_completed();
 			}
 
-			// 언로드된 레벨은 제거
-			if(removeAfterUnload)
-			{
-				for (auto l : unloadingLevels)
-					GetWorld()->StreamingLevels.Remove(l);
-			}
-
 			return;
 		}
 
-		auto* pCallback = NewObject<ULoadLevelStreamingCallback>()->Init(unloadingLevels, s, GetWorld(), removeAfterUnload, packageName);
+		auto* pCallback = NewObject<ULoadLevelStreamingCallback>()->Init(unloadStreamingLevels, s, GetWorld(), removeAfterUnload, packageName);
 
-		_loadLevelStreamingCallbacks.Add(pCallback);
+		_levelStreamingCallbacks.Add(pCallback);
 		
-		for (auto &l : unloadingLevels)
+		for (auto &l : unloadStreamingLevels)
 		{
 			UGameplayStatics::UnloadStreamLevel(GetWorld(), 
 				FName(*FPackageName::GetShortName(l->GetWorldAssetPackageFName())),
 				pCallback->GetLatentActionInfo()
 				);
+				
+			UE_LOG(RxCpp, Log, TEXT("ARxCppLoader => UnloadStreamLevel() is called on ULevelStreaming '%s'"), *FPackageName::GetShortName(l->GetWorldAssetPackageFName()));
 		}
 	}).as_dynamic();
 }
@@ -360,7 +425,7 @@ Rx::observable<UObject*> ARxCppLoader::LoadUObject(const FString& objectPath)
 
 void ARxCppLoader::ClearCompletedCallbacks()
 {
-	_loadLevelStreamingCallbacks.RemoveAll([](auto v) { return v->_isCompleted; });
+	_levelStreamingCallbacks.RemoveAll([](auto v) { return v->_isCompleted; });
 
 	TArray<FString> keys;
 
