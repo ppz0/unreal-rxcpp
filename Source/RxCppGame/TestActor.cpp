@@ -3,6 +3,7 @@
 #include "RxCpp/RxCppLoader.h"
 #include "RxCpp/RxCppInput.h"
 
+DEFINE_LOG_CATEGORY(RxCppGame);
 
 ATestActor::ATestActor()
 {
@@ -16,9 +17,25 @@ void ATestActor::BeginPlay()
 	//* Initializes RxCppManager
     FRxCppManager::Instance().Init(GetWorld());
 
-	// TWeakObjectPtr<AActor> self(this);
+	static int score = 0;
 
-	// //* Every 30 frames which registered in TG_PrePhysics tick group, call the lambda in subscribe() method.
+	RX_INTERVAL(1.f).subscribe([](auto _) { score += 100; });
+
+	RX_EVERYFRAME(1)
+		.map([](auto _) { return score; })
+		.distinct_until_changed()
+		.subscribe([](auto v) {
+			UE_LOG(RxCppGame, Log, TEXT("OnScoreChanged: %d"), v);
+		});
+
+	return;
+
+	RX_EVERYFRAME(60).subscribe([](auto v) { UE_LOG(RxCppGame, Log, TEXT("every-frame: %d"), v); });
+	RX_NEXTFRAME().subscribe([](auto v) { UE_LOG(RxCppGame, Log, TEXT("next-frame: %d"), v); });
+	RX_INTERVAL(1.f).subscribe([](auto v) { UE_LOG(RxCppGame, Log, TEXT("interval-frame: %d"), v); });
+	RX_TIMER(5.f).subscribe([](auto v) { UE_LOG(RxCppGame, Log, TEXT("timer-frame: %d"), v); });
+
+	//* Every 30 frames which registered in TG_PrePhysics tick group, call the lambda in subscribe() method.
 	observable<>::everyframe(30, On_TG_PrePhysics).is_valid(this)
 		.subscribe([](auto v) {
 			UE_LOG(LogTemp, Warning, TEXT("frame => %d"), v);

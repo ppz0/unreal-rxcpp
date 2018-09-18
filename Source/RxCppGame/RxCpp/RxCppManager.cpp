@@ -23,7 +23,7 @@ void FRxCppManager::Init(const UWorld* pWorld)
 		p.Value->RegisterTickFunction(pWorld->PersistentLevel);
 	}
 
-	UE_LOG(RxCpp, Warning, TEXT("FRxCppManager inited"));
+	UE_LOG(RxCpp, Log, TEXT("FRxCppManager inited"));
 }
 
 void FRxCppManager::Destroy()

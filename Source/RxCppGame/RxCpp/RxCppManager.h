@@ -64,8 +64,8 @@ inline observe_on_one_worker &observe_on_tick_group()
 #define RX_EVERYFRAME_WITH(x, owner) observable<>::everyframe(x, On_TG_PrePhysics).is_valid(owner)
 
 //* NextFrame macro ('Zero' duration observable<>::timer)
-#define RX_NEXTFRAME() observable<>::timer(TNumericLimits<float>::Min, On_TG_PrePhysics)
-#define RX_NEXTFRAME_WITH(owner) observable<>::timer(TNumericLimits<float>::Min, On_TG_PrePhysics).is_valid(owner)
+#define RX_NEXTFRAME() observable<>::timer(MIN_flt, On_TG_PrePhysics)
+#define RX_NEXTFRAME_WITH(owner) observable<>::timer(MIN_flt, On_TG_PrePhysics).is_valid(owner)
 
 //* Helper macro for observable<>::timer
 #define RX_TIMER(x)	observable<>::timer(x, On_TG_PrePhysics)

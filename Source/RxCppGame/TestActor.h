@@ -5,6 +5,7 @@
 #include "FSM.h"
 #include "TestActor.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(RxCppGame, Log, All);
 
 UENUM(BlueprintType)
 enum class ETestStates : uint8
